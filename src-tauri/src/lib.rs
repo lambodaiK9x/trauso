@@ -20,10 +20,10 @@ static ARIA2_CLIENT: LazyLock<Mutex<Aria2Client>> = LazyLock::new(|| {
 
 fn get_settings(handle: &tauri::AppHandle) -> AppSettings {
     let store = handle.store("settings").unwrap();
-    let result = store.get("app_settings");
-    match result {
-        Ok(Some(value)) => serde_json::from_value(value).unwrap_or(AppSettings::default()),
-        _ => AppSettings::default(),
+
+    match store.get("app_settings") {
+        Some(value) => serde_json::from_value(value).unwrap_or_default(),
+        None => AppSettings::default(),
     }
 }
 
